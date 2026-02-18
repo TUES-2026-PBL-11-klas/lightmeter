@@ -12,7 +12,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.unitedpixels.lightmeter",
       "infoPlist": {
-        "NSCameraUsageDescription": "United Pixels needs access to your camera to measure light for your analog photos."
+        "NSCameraUsageDescription": "United Pixels needs access to your camera to measure light for your analog photos.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
