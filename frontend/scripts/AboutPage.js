@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native';
-import TeamMember from '../components/TeamMember';
+import TeamMember from '../components/teamMember';
 
 export default function AboutScreen({ navigation }) {
   const [menuOpen, setMenuOpen] = useState(false);
