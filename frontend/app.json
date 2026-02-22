@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "frontend",
+    "name": "Lightmeter",
     "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -49,10 +49,9 @@
         }
       ],
       [
-        "react-native-vision-camera",
+        "expo-camera",
         {
-          "cameraPermissionText": "United Pixels needs access to your camera to measure light for your analog photos.",
-          "enableMicrophonePermission": false
+          "cameraPermission": "United Pixels needs access to your camera to measure light for your analog photos."
         }
       ]
     ],
