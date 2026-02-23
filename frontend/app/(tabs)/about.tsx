@@ -20,6 +20,8 @@ export default function AboutScreen(): JSX.Element {
     const newValue = !menuOpen;
     setMenuOpen(newValue);
 
+    menuAnim.stopAnimation();
+
     Animated.timing(menuAnim, {
       toValue: newValue ? 1 : 0,
       duration: 250,
@@ -29,7 +31,7 @@ export default function AboutScreen(): JSX.Element {
 
   const navigate = (path: string) => {
     setMenuOpen(false);
-    router.push(path as any); // директен път без as any
+    router.push(path as any);
   };
 
   return (

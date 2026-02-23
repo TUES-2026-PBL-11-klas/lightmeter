@@ -23,7 +23,7 @@ export default function HomeScreen() {
   const menuAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.parallel([
+    const animation = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 800,
@@ -36,12 +36,18 @@ export default function HomeScreen() {
         easing: Easing.out(Easing.ease),
         useNativeDriver: true,
       }),
-    ]).start();
+    ]);
+
+    animation.start();
+
+    return () => animation.stop();
   }, []);
 
   const toggleMenu = () => {
     const newValue = !menuOpen;
     setMenuOpen(newValue);
+
+    menuAnim.stopAnimation();
 
     Animated.timing(menuAnim, {
       toValue: newValue ? 1 : 0,
@@ -182,22 +188,6 @@ export default function HomeScreen() {
             <Text style={styles.featureText}>
               Track your metering history and improve over time
             </Text>
-          </View>
-        </View>
-
-        {/* STATS SECTION */}
-        <View style={styles.statsSection}>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>10K+</Text>
-            <Text style={styles.statLabel}>Users</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>50K+</Text>
-            <Text style={styles.statLabel}>Photos</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>4.9★</Text>
-            <Text style={styles.statLabel}>Rating</Text>
           </View>
         </View>
 
@@ -451,32 +441,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     lineHeight: 22,
-  },
-
-  /* STATS */
-  statsSection: {
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
-    marginHorizontal: 0,
-  },
-  statBox: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 20,
-  },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#33ce7d',
-    marginBottom: 5,
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#666',
-    fontWeight: '600',
   },
 
   /* GALLERY */
