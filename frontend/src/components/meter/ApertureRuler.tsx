@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { View, Text, FlatList, Dimensions, StyleSheet } from 'react-native';
-import { STANDARD_APERTURES } from '../../utils/exposureMath';
+import { APERTURE_VALUES } from '@/src/types/photoConstants';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = 75;
@@ -11,13 +11,13 @@ interface Props {
 }
 
 export const ApertureRuler = ({ currentAperture, onApertureChange }: Props) => {
-  const flatListRef = useRef<FlatList>(null);  // ← lives here now
+  const flatListRef = useRef<FlatList>(null);
 
   return (
     <View style={styles.rulerContainer}>
       <FlatList
         ref={flatListRef}
-        data={STANDARD_APERTURES}
+        data={APERTURE_VALUES}
         horizontal
         snapToInterval={ITEM_WIDTH}
         decelerationRate="fast"
@@ -25,7 +25,7 @@ export const ApertureRuler = ({ currentAperture, onApertureChange }: Props) => {
         contentContainerStyle={{ paddingHorizontal: (width - ITEM_WIDTH) / 2 }}
         onMomentumScrollEnd={(e) => {
           const index = Math.round(e.nativeEvent.contentOffset.x / ITEM_WIDTH);
-          onApertureChange(STANDARD_APERTURES[index]);
+          onApertureChange(APERTURE_VALUES[index]);
         }}
         renderItem={({ item }) => (
           <View style={{ width: ITEM_WIDTH, alignItems: 'center' }}>

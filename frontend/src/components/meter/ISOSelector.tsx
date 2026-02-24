@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native';
-
-const FILM_ISOS = [25, 50, 100, 200, 400, 800, 1600, 3200];
+import { FILM_ISOS, FilmISO } from '@/src/types/photoConstants'
 
 interface Props {
   selected: number;
