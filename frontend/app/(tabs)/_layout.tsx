@@ -15,21 +15,32 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
-      }}>
+      }}
+    >
+      {/* Основни табове */}
       <Tabs.Screen
-        name="index"
+        name="index" // app/tabs/index.tsx (Home)
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="about"
+        name="about" // app/tabs/about.tsx
         options={{
           title: 'About',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="info.circle" color={color} />,
         }}
       />
+
+      <Tabs.Screen
+        name="login" // app/tabs/index.tsx (Home)
+        options={{
+          title: 'Login',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.circle" color={color} />,
+        }}
+      />
+
     </Tabs>
   );
 }
