@@ -15,10 +15,10 @@ RUN bun build ./src/index.ts \
     --bytecode
 
 # Deploy stage
-FROM gcr.io/distroless/static AS release
+FROM gcr.io/distroless/cc AS release
 
 WORKDIR /app
-COPY --from=build /app/server .
+COPY --from=build --chown=1000:1000 /app/server .
 
 # has no /etc/passwd for resolving UID 
 USER 1000
