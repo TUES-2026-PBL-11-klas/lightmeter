@@ -98,8 +98,7 @@ export default function HomeScreen() {
 
           <TouchableOpacity
             onPress={() => {
-              setMenuOpen(false);
-              // router.push('/signup');
+              router.push('../signup');
             }}
           >
             <Text style={styles.menuItem}>Sign Up</Text>
@@ -108,7 +107,7 @@ export default function HomeScreen() {
           <TouchableOpacity
             onPress={() => {
               setMenuOpen(false);
-              // router.push('/login');
+              router.push('../login');
             }}
           >
             <Text style={styles.menuItem}>Log In</Text>
