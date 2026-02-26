@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "app/(auth)/login.tsx", "app/(auth)/signup.tsx", "../../_layout.tsx", "app/(tabs)/meter.tsx"  ]
+, "app/(auth)/login.tsx", "app/(auth)/signup.tsx", "../../_layout.tsx", "app/(tabs)/meter.tsx", "../../log.tsx"  ]
 }
