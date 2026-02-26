@@ -33,14 +33,6 @@ export default function TabLayout() {
         }}
       />
 
-      <Tabs.Screen
-        name="login" // app/tabs/index.tsx (Home)
-        options={{
-          title: 'Login',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.circle" color={color} />,
-        }}
-      />
-
     </Tabs>
   );
 }

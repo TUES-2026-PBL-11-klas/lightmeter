@@ -11,22 +11,35 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default function LoginScreen() {
   const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
 
-  // Статичен логин
-  const handleLogin = () => {
-    if (email === 'test@example.com' && password === '123456') {
-      Alert.alert('Success', 'Logged in successfully!');
-
-      // Път към Home (tabs/index.tsx)
-      router.replace('../tabs/index'); 
+  const validateEmail = (text: string) => {
+    setEmail(text);
+    if (text && !EMAIL_REGEX.test(text)) {
+      setEmailError('Invalid email format');
     } else {
-      Alert.alert('Error', 'Invalid credentials');
+      setEmailError('');
     }
+  };
+
+  const handleLogin = () => {
+    if (!email || emailError) {
+      Alert.alert('Error', 'Please enter a valid email');
+      return;
+    }
+    if (!password) {
+      Alert.alert('Error', 'Please enter your password');
+      return;
+    }
+    // TODO: Replace with actual authentication
+    router.push('../(tabs)/meter');
   };
 
   return (
@@ -39,13 +52,14 @@ export default function LoginScreen() {
         <Text style={styles.subtitle}>Log in to continue</Text>
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, emailError ? styles.inputError : null]}
           placeholder="Email address"
           value={email}
-          onChangeText={setEmail}
+          onChangeText={validateEmail}
           keyboardType="email-address"
           autoCapitalize="none"
         />
+        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
         <TextInput
           style={styles.input}
@@ -63,7 +77,6 @@ export default function LoginScreen() {
           Don't have an account?{' '}
           <Text
             style={styles.linkText}
-            // Път към Signup (tabs/signup.tsx)
             onPress={() => router.push('/signup')}
           >
             Sign Up
@@ -113,6 +126,15 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     fontSize: 16,
     marginBottom: 16,
+  },
+  inputError: {
+    borderColor: '#ff6b6b',
+  },
+  errorText: {
+    color: '#ff6b6b',
+    fontSize: 12,
+    marginBottom: 8,
+    width: '100%',
   },
   btn: {
     backgroundColor: '#33ce7d',
