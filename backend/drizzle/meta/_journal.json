@@ -12,8 +12,22 @@
     {
       "idx": 1,
       "version": "7",
-      "when": 1772205281376,
-      "tag": "0001_fearless_drax",
+      "when": 1772207983268,
+      "tag": "0001_modern_bucky",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772212344910,
+      "tag": "0002_rare_ronan",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1772219232928,
+      "tag": "0003_far_kabuki",
       "breakpoints": true
     }
   ]

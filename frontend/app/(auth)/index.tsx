@@ -146,7 +146,7 @@ export default function HomeScreen() {
 
             <TouchableOpacity
               style={styles.primaryBtn}
-              // onPress={() => router.push('/login')}
+              onPress={() => router.push('/signup')}
             >
               <Text style={styles.primaryBtnText}>Get Started</Text>
             </TouchableOpacity>
