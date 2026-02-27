@@ -46,6 +46,8 @@ export const authRoutes = new Elysia({ prefix: '/auth', detail: { tags: ['Auth']
             const hashed = await Bun.password.hash(body.password)
             const [user] = await db.insert(users).values({
                 email: body.email,
+                name: body.name,
+                birthdate: body.birthdate,
                 password: hashed,
             }).returning({ id: users.id, email: users.email })
 
@@ -55,6 +57,8 @@ export const authRoutes = new Elysia({ prefix: '/auth', detail: { tags: ['Auth']
             body: t.Object({
                 email: t.String({ format: 'email' }),
                 password: t.String({ minLength: 8 }),
+                name: t.String({ minLength: 1 }),
+                birthdate: t.String({ format: 'date' }),
             }),
         }
     )

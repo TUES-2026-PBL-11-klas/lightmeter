@@ -44,3 +44,4 @@ app-example/
 # IDEs
 .vscode/
 .idea/
+.env
