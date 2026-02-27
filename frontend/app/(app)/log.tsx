@@ -95,6 +95,15 @@ export default function NotesScreen() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      await notesApi.delete(id);
+      setNotes(notes.filter(n => n.id !== id));
+    } catch {
+      Alert.alert('Error', 'Failed to delete note');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>My Notes</Text>
@@ -117,6 +126,12 @@ export default function NotesScreen() {
             <Text style={styles.noteLog}>ISO: {item.iso}</Text>
             <Text style={styles.noteLog}>Aperture: f/{item.aperture}</Text>
             <Text style={styles.noteLog}>Shutter: {formatShutterSpeed(item.shutterSpeed)}</Text>
+            <TouchableOpacity
+              style={styles.deleteBtn}
+              onPress={() => handleDelete(item.id)}
+            >
+              <Text style={styles.deleteBtnText}>Delete</Text>
+            </TouchableOpacity>
           </View>
         )}
       />
@@ -235,4 +250,18 @@ const styles = StyleSheet.create({
   modalBtn: { paddingVertical: 12, paddingHorizontal: 25, borderRadius: 50, alignItems: 'center' },
   modalBtnText: { fontSize: 16, fontWeight: '700', color: '#fff' },
   dateInput: { justifyContent: 'center', paddingVertical: 14 },
+  deleteBtn: {
+  marginTop: 10,
+  alignSelf: 'flex-end',
+  paddingVertical: 6,
+  paddingHorizontal: 14,
+  borderRadius: 20,
+  borderWidth: 1.5,
+  borderColor: '#b13232',
+},
+deleteBtnText: {
+  color: '#b13232',
+  fontSize: 13,
+  fontWeight: '700',
+},
 });
