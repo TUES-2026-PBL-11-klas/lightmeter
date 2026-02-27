@@ -1,5 +1,4 @@
-# Build stage
-FROM oven/bun:canary AS build
+FROM oven/bun:1.1.18-alpine AS build
 
 WORKDIR /app
 COPY package.json bun.lock* ./
@@ -14,15 +13,26 @@ RUN bun build ./src/index.ts \
     --minify \
     --bytecode
 
-# Deploy stage
-FROM gcr.io/distroless/cc AS release
+FROM gcr.io/distroless/cc-debian12:nonroot AS release
 
 WORKDIR /app
-COPY --from=build --chown=1000:1000 /app/server .
+COPY --from=build --chown=65532:65532 /app/server .
 
-# has no /etc/passwd for resolving UID 
-USER 1000
+USER 65532:65532
 EXPOSE 3000
-ENV NODE_ENV=production
+ENV NODE_ENV=production \
+    PORT=3000
 
-ENTRYPOINT [ "/app/server" ]
+HEALTHCHECK --interval=15s --timeout=3s --start-period=10s --retries=3 \
+    CMD ["/app/server", "healthcheck"]
+
+ENTRYPOINT ["/app/server"]
+
+FROM oven/bun:1.1.18-alpine AS migrate
+
+WORKDIR /app
+COPY package.json bun.lock* ./
+RUN bun install --frozen-lockfile
+COPY . .
+
+ENTRYPOINT ["bunx", "drizzle-kit", "push", "--force"]
