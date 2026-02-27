@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,11 +10,13 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import DatePicker from '../../components/DatePicker';
 import ChipPicker from '../../components/ChipPicker';
 import { APERTURE_VALUES, FILM_ISOS, SHUTTER_SPEEDS } from '@/src/types/photoConstants';
 import { formatShutterSpeed } from '@/src/utils/exposureMath';
+import { notesApi } from '@/src/api/notes';
 
 const { width } = Dimensions.get('window');
 
@@ -39,6 +41,21 @@ export default function NotesScreen() {
   // date picker state (mirrors signup.tsx implementation)
   const [datePickerOpen, setDatePickerOpen] = useState(false);
 
+  useEffect(() => {
+    notesApi.getAll().then(data => {
+      if (Array.isArray(data)) {
+        setNotes(data.map(n => ({
+          id: n.id,
+          date: n.date,
+          place: n.place,
+          iso: Number(n.iso) as typeof FILM_ISOS[number],
+          aperture: Number(n.aperture) as typeof APERTURE_VALUES[number],
+          shutterSpeed: Number(n.shutter_speed) as typeof SHUTTER_SPEEDS[number],
+        })));
+      }
+    });
+  }, []);
+
   // Filter notes based on search query
   const filteredNotes = notes.filter(
     (note) =>
@@ -49,18 +66,35 @@ export default function NotesScreen() {
       note.shutterSpeed.toString().includes(search)
   );
 
-  const addNote = () => {
-    if (!date || !place || iso === '' || aperture === '' || shutterSpeed === '') return;
-    setNotes([
-      ...notes,
-      { id: Math.random().toString(), date, place, iso: iso as typeof FILM_ISOS[number], aperture: aperture as typeof APERTURE_VALUES[number], shutterSpeed: shutterSpeed as typeof SHUTTER_SPEEDS[number] },
-    ]);
+  const addNote = async () => {
+  if (!date || !place || iso === '' || aperture === '' || shutterSpeed === '') return;
+
+  const data = await notesApi.create({
+    iso: iso.toString(),
+    aperture: aperture.toString(),
+    shutter_speed: shutterSpeed.toString(),
+    date,
+    place,
+  });
+
+  if (data.id) {
+    setNotes([...notes, {
+      id: data.id,
+      date: data.date,
+      place: data.place,
+      iso: iso as typeof FILM_ISOS[number],
+      aperture: aperture as typeof APERTURE_VALUES[number],
+      shutterSpeed: shutterSpeed as typeof SHUTTER_SPEEDS[number],
+    }]);
     setDate('');
     setPlace('');
     setIso('');
     setAperture('');
     setShutterSpeed('');
     setModalVisible(false);
+    } else {
+      Alert.alert('Error', 'Failed to save note');
+    }
   };
 
   // date picker is now handled by the shared component below

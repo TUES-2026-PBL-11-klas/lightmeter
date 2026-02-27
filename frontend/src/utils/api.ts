@@ -52,19 +52,26 @@ export const api = {
     return res.json();
   },
 
-  get: async (path: string) => {
-    const headers = await authHeaders();
+  get: async (path: string, auth = true) => {
+    const headers = auth ? await authHeaders() : {};
     const res = await fetch(`${BASE_URL}${path}`, { headers });
     return res.json();
   },
 
-  patch: async (path: string, body: object) => {
-    const headers = { 'Content-Type': 'application/json', ...(await authHeaders()) };
+  patch: async (path: string, body: object, auth = true) => {
+    const headers = { 'Content-Type': 'application/json', ...(auth ? await authHeaders() : {}) };
     const res = await fetch(`${BASE_URL}${path}`, {
       method: 'PATCH',
       headers,
       body: JSON.stringify(body),
     });
     return res.json();
+  },
+
+  delete: async (path: string, auth = true) => {
+    const headers = auth ? await authHeaders() : {};
+    const res = await fetch(`${BASE_URL}${path}`, { method: 'DELETE', headers });
+    if (!res.ok) throw new Error('Delete request failed');
+    return true;
   },
 };
