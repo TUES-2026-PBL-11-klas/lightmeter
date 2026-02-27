@@ -11,12 +11,14 @@ export const users = pgTable('users', {
 
 export const notes = pgTable('notes', {
     id: uuid('id').primaryKey().defaultRandom(),
-        user_id: uuid('user_id')
+    user_id: uuid('user_id')
         .references(() => users.id)
         .notNull(),
     iso: text('iso'),
     aperture: text('aperture'),
     shutter_speed: text('shutter_speed'),
+    date: date('date'),
+    place: text('place'),
 })
 
 export const refreshTokens = pgTable('refresh_tokens', {

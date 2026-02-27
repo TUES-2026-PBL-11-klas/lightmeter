@@ -32,9 +32,6 @@ async function issueTokens(userId: string, email: string, jwt: { sign: (payload:
 }
 
 export const authRoutes = new Elysia({ prefix: '/auth', detail: { tags: ['Auth'] } })
-<<<<<<< HEAD
-    .post('/register', ({ body }) => body)
-=======
     .use(authPlugin)
     .post('/register',
         async ({ body, jwt, set }) => {
@@ -136,4 +133,3 @@ export const authRoutes = new Elysia({ prefix: '/auth', detail: { tags: ['Auth']
             }),
         }
     )
->>>>>>> 2f73b5faf7fc4950be0211bbaa2f789765337049

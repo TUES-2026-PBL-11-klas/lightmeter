@@ -13,17 +13,29 @@ export const notesRoutes = new Elysia({
     detail: { tags: ['Notes'] }
 })
 
-/**
- * CREATE NOTE
- */
+const getJwtPayload = async (jwt: any, set: any, authHeader?: string) => {
+    if (!authHeader) {
+        set.status = 401
+        return null
+    }
+
+    const token = authHeader.replace('Bearer ', '')
+    try {
+        const payload = await jwt.verify(token) as JwtPayload
+        return payload
+    } catch {
+        set.status = 401
+        return null
+    }
+}
+
+// CREATE NOTE
 notesRoutes.post(
     '/',
-    async ({ body, jwt, set }) => {
-        const payload = await jwt.verify() as JwtPayload
-        if (!payload) {
-            set.status = 401
-            return { message: 'Unauthorized' }
-        }
+    async ({ body, jwt, set, headers }) => {
+        const payload = await getJwtPayload(jwt, set, headers['authorization'])
+        if (!payload) return { message: 'Unauthorized' }
+
         const userId = payload.sub
 
         const [note] = await db
@@ -33,6 +45,8 @@ notesRoutes.post(
                 iso: body.iso,
                 aperture: body.aperture,
                 shutter_speed: body.shutter_speed,
+                date: body.date,
+                place: body.place,
             })
             .returning()
 
@@ -43,19 +57,17 @@ notesRoutes.post(
             iso: t.String(),
             aperture: t.String(),
             shutter_speed: t.String(),
+            date: t.String({ format: 'date' }),
+            place: t.String(),
         }),
     }
 )
 
-/**
- * GET ALL NOTES FOR USER
- */
-notesRoutes.get('/', async ({ jwt, set }) => {
-    const payload = await jwt.verify() as JwtPayload
-    if (!payload) {
-        set.status = 401
-        return { message: 'Unauthorized' }
-    }
+// GET ALL NOTES FOR USER
+notesRoutes.get('/', async ({ jwt, set, headers }) => {
+    const payload = await getJwtPayload(jwt, set, headers['authorization'])
+    if (!payload) return { message: 'Unauthorized' }
+
     const userId = payload.sub
 
     return db.query.notes.findMany({
@@ -63,15 +75,11 @@ notesRoutes.get('/', async ({ jwt, set }) => {
     })
 })
 
-/**
- * DELETE NOTE
- */
-notesRoutes.delete('/:id', async ({ params, jwt, set }) => {
-    const payload = await jwt.verify() as JwtPayload
-    if (!payload) {
-        set.status = 401
-        return { message: 'Unauthorized' }
-    }
+// DELETE NOTE
+notesRoutes.delete('/:id', async ({ params, jwt, set, headers }) => {
+    const payload = await getJwtPayload(jwt, set, headers['authorization'])
+    if (!payload) return { message: 'Unauthorized' }
+
     const userId = payload.sub
 
     const deleted = await db
