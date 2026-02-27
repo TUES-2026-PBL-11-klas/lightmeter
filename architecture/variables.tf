@@ -24,22 +24,10 @@ variable "db_name" {
   type        = string
 }
 
-variable "db_instances" {
-  description = "Number of PostgreSQL instances (1 = primary only, 2+ = primary + replicas)"
-  type        = number
-  default     = 1
-}
-
 variable "db_storage_size" {
   description = "PVC storage size for PostgreSQL (e.g. '5Gi')"
   type        = string
   default     = "5Gi"
-}
-
-variable "cnpg_chart_version" {
-  description = "CloudNativePG Helm chart version"
-  type        = string
-  default     = "0.21.5"
 }
 
 variable "migrate_image" {
@@ -82,4 +70,10 @@ variable "backend_port" {
 variable "backend_host" {
   description = "Hostname for backend (e.g. api.example.com)"
   type        = string
+}
+
+variable "refresh_token_expiry_days" {
+  description = "Refresh token expiry in days"
+  type        = number
+  default     = 30
 }

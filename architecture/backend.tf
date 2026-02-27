@@ -1,3 +1,23 @@
+resource "random_password" "jwt_secret" {
+  length  = 64
+  special = false
+}
+
+resource "kubernetes_secret_v1" "backend_secrets" {
+  metadata {
+    name      = "backend-secrets"
+    namespace = kubernetes_namespace_v1.app.metadata[0].name
+  }
+
+  data = {
+    JWT_SECRET = random_password.jwt_secret.result
+  }
+
+  lifecycle {
+    ignore_changes = [data]
+  }
+}
+
 resource "kubernetes_deployment_v1" "backend" {
   metadata {
     name      = "backend"
@@ -43,6 +63,21 @@ resource "kubernetes_deployment_v1" "backend" {
           }
 
           env {
+            name = "JWT_SECRET"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret_v1.backend_secrets.metadata[0].name
+                key  = "JWT_SECRET"
+              }
+            }
+          }
+
+          env {
+            name  = "REFRESH_TOKEN_EXPIRY_DAYS"
+            value = tostring(var.refresh_token_expiry_days)
+          }
+
+          env {
             name  = "NODE_ENV"
             value = "production"
           }
@@ -65,7 +100,7 @@ resource "kubernetes_deployment_v1" "backend" {
 
           startup_probe {
             http_get {
-              path = "/health"
+              path = "/swagger"
               port = "http"
             }
             period_seconds    = 3
@@ -74,7 +109,7 @@ resource "kubernetes_deployment_v1" "backend" {
 
           liveness_probe {
             http_get {
-              path = "/health"
+              path = "/swagger"
               port = "http"
             }
             period_seconds    = 10
@@ -83,7 +118,7 @@ resource "kubernetes_deployment_v1" "backend" {
 
           readiness_probe {
             http_get {
-              path = "/ready"
+              path = "/swagger"
               port = "http"
             }
             period_seconds    = 5
@@ -108,11 +143,9 @@ resource "kubernetes_deployment_v1" "backend" {
   depends_on = [
     kubernetes_job_v1.migrate,
     kubernetes_namespace_v1.app,
+    kubernetes_secret_v1.backend_secrets,
   ]
 }
-
-
-
 
 resource "kubernetes_service_v1" "backend" {
   metadata {
