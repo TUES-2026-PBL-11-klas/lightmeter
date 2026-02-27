@@ -4,6 +4,7 @@ import { cameraRoutes } from './routes/cameras'
 import { rollRoutes } from './routes/rolls'
 import { frameRoutes } from './routes/frames'
 import { requireAuth } from '../plugins/auth.plugin'
+import { notesRoutes } from './routes/notes'
 
 export const v1 = new Elysia({ prefix: '/v1' })
     .use(authRoutes)
@@ -11,3 +12,4 @@ export const v1 = new Elysia({ prefix: '/v1' })
     .use(cameraRoutes)
     .use(rollRoutes)
     .use(frameRoutes)
+    .use(notesRoutes)
