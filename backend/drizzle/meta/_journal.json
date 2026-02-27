@@ -8,6 +8,13 @@
       "when": 1772028681484,
       "tag": "0000_legal_gateway",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1772205281376,
+      "tag": "0001_fearless_drax",
+      "breakpoints": true
     }
   ]
 }
