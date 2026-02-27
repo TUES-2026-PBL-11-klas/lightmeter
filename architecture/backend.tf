@@ -25,7 +25,7 @@ resource "kubernetes_deployment_v1" "backend" {
         container {
           name              = "backend"
           image             = var.backend_image
-          image_pull_policy = "IfNotPresent"
+          image_pull_policy = "Always"
 
           port {
             name           = "http"
@@ -106,7 +106,7 @@ resource "kubernetes_deployment_v1" "backend" {
   }
 
   depends_on = [
-    kubernetes_job_v1.push,
+    kubernetes_job_v1.migrate,
     kubernetes_namespace_v1.app,
   ]
 }
@@ -130,5 +130,35 @@ resource "kubernetes_service_v1" "backend" {
       target_port = "http"
     }
     type = "ClusterIP"
+  }
+}
+
+resource "kubernetes_ingress_v1" "backend" {
+  metadata {
+    name      = "backend"
+    namespace = kubernetes_namespace_v1.app.metadata[0].name
+    annotations = {
+      "kubernetes.io/ingress.class" = "traefik"
+    }
+  }
+
+  spec {
+    rule {
+      host = var.backend_host
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = kubernetes_service_v1.backend.metadata[0].name
+              port {
+                name = "http"
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

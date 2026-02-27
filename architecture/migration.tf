@@ -31,7 +31,7 @@ resource "kubernetes_secret_v1" "migrator_uri" {
   }
 
   data = {
-    uri       = "postgres://app_migrator:${random_password.migrator.result}@${var.db_name}-rw:5432/${var.db_name}"
+    uri = "postgres://app_migrator:${random_password.migrator.result}@${var.db_name}-rw:5432/${var.db_name}"
     sensitive = true
   }
 
@@ -96,11 +96,11 @@ resource "kubernetes_job_v1" "migrate" {
           }
 
           security_context {
-            run_as_non_root            = true
-            run_as_user                = 1000
-            run_as_group               = 1000
-            read_only_root_filesystem  = true
-            allow_privilege_escalation = false
+            run_as_non_root             = true
+            run_as_user                 = 1000
+            run_as_group                = 1000
+            read_only_root_filesystem   = true
+            allow_privilege_escalation  = false
 
             capabilities {
               drop = ["ALL"]

@@ -78,3 +78,8 @@ variable "backend_port" {
   type        = number
   default     = 3000
 }
+
+variable "backend_host" {
+  description = "Hostname for backend (e.g. api.example.com)"
+  type        = string
+}

@@ -42,3 +42,8 @@ spec:
         - "ALTER DEFAULT PRIVILEGES FOR ROLE app_migrator              
             IN SCHEMA app                                              
             GRANT USAGE, SELECT ON SEQUENCES TO app"                  
+  
+  instances: ${db_instances}
+
+  storage:
+    size: ${storage_size}
