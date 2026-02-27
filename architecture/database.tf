@@ -11,13 +11,15 @@ resource "helm_release" "cnpg_operator" {
 
 resource "kubectl_manifest" "cnpg_cluster" {
   yaml_body = templatefile("${path.module}/cluster.yaml.tpl", {
-    db_name      = var.db_name
-    db_instances = var.db_instances
-    storage_size = var.db_storage_size
+    db_name                  = var.db_name
+    db_instances             = var.db_instances
+    storage_size             = var.db_storage_size
+    migrator_password_secret = kubernetes_secret_v1.migrator_password.metadata[0].name
   })
 
   depends_on = [
     helm_release.cnpg_operator,
     kubernetes_namespace_v1.db,
+    kubernetes_secret_v1.migrator_password,
   ]
 }
