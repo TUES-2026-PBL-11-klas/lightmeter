@@ -169,7 +169,7 @@ export default function HomeScreen() {
             <Text style={styles.featureIcon}>⚡</Text>
             <Text style={styles.featureTitle}>Instant Results</Text>
             <Text style={styles.featureText}>
-              Real-time light analysis powered by advanced AI
+              Real-time light analysis
             </Text>
           </View>
 
@@ -187,51 +187,6 @@ export default function HomeScreen() {
             <Text style={styles.featureText}>
               Track your metering history and improve over time
             </Text>
-          </View>
-        </View>
-
-        {/* GALLERY SECTION */}
-        <View style={styles.gallerySection}>
-          <Text style={styles.sectionTitle}>Professional Tools</Text>
-
-          <View style={styles.galleryGrid}>
-            <View style={styles.galleryItem}>
-              <Image
-                source={require('../../assets/images/camera.png')}
-                resizeMode="cover"
-                style={styles.galleryImage}
-              />
-              <Text style={styles.galleryLabel}>DSLR Mode</Text>
-            </View>
-
-            <View style={styles.galleryItem}>
-              <Image
-                source={require('../../assets/images/camera.png')}
-                resizeMode="cover"
-                style={styles.galleryImage}
-              />
-              <Text style={styles.galleryLabel}>Manual Focus</Text>
-            </View>
-          </View>
-
-          <View style={styles.galleryGrid}>
-            <View style={styles.galleryItem}>
-              <Image
-                source={require('../../assets/images/camera.png')}
-                resizeMode="cover"
-                style={styles.galleryImage}
-              />
-              <Text style={styles.galleryLabel}>Instant Mode</Text>
-            </View>
-            
-            <View style={styles.galleryItem}>
-              <Image
-                source={require('../../assets/images/camera.png')}
-                resizeMode="cover"
-                style={styles.galleryImage}
-              />
-              <Text style={styles.galleryLabel}>Film Mode</Text>
-            </View>
           </View>
         </View>
 
@@ -258,7 +213,7 @@ export default function HomeScreen() {
             <View style={styles.stepContent}>
               <Text style={styles.stepTitle}>Analyze Light</Text>
               <Text style={styles.stepText}>
-                Our AI instantly analyzes the light conditions and exposure levels
+                Our app instantly analyzes the light conditions and exposure levels
               </Text>
             </View>
           </View>
@@ -440,41 +395,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     lineHeight: 22,
-  },
-
-  /* GALLERY */
-  gallerySection: {
-    paddingHorizontal: 20,
-    paddingVertical: 50,
-    backgroundColor: '#fff',
-  },
-  galleryGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-    gap: 15,
-  },
-  galleryItem: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 15,
-    elevation: 3,
-    borderWidth: 2,
-    borderColor: '#33ce7d',
-  },
-  galleryImage: {
-    width: '100%',
-    height: 150,
-    borderRadius: 15,
-    marginBottom: 12,
-  },
-  galleryLabel: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#33ce7d',
-    textAlign: 'center',
   },
 
   /* HOW IT WORKS */

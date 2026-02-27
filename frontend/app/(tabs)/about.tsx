@@ -87,38 +87,38 @@ export default function AboutScreen(): JSX.Element {
         <View style={styles.hero}>
           <Text style={styles.heroTitle}>About Us</Text>
           <Text style={styles.heroText}>
-            Need to put text here.
+            In the world of photography, light is everything. But capturing that perfect exposure shouldn't feel like a guessing game. Light Meter was born out of a passion for the craft, designed to bridge the gap between technical precision and creative vision.
           </Text>
         </View>
 
         {/* CARDS */}
         <View style={styles.cards}>
           <View style={[styles.card, { backgroundColor: '#f2fbf8' }]}>
-            <Text style={styles.cardIcon}>🎯</Text>
+            <Text style={styles.cardIcon}>✨</Text>
             <Text style={styles.cardTitle}>Our Mission</Text>
-            <Text style={styles.cardText}>Need to put text here.</Text>
+            <Text style={styles.cardText}>To build the ultimate companion for storytellers. Whether you're shooting on vintage 35mm film or a high-end mirrorless setup, we’re here to ensure you never miss a moment due to poor exposure.</Text>
             <Image
-              source={require('../../assets/images/camera.png')}
+              source={require('../../assets/images/AboutUs/OurMission.jpg')}
               style={styles.cardImage}
             />
           </View>
 
           <View style={[styles.card, { backgroundColor: '#fdf0f9' }]}>
-            <Text style={styles.cardIcon}>🌟</Text>
-            <Text style={styles.cardTitle}>Our Vision</Text>
-            <Text style={styles.cardText}>Need to put text here.</Text>
+            <Text style={styles.cardIcon}>🎞️</Text>
+            <Text style={styles.cardTitle}>What We Do?</Text>
+            <Text style={styles.cardText}>We help photographers—from film enthusiasts to digital pros—master their environment. Our app doesn't just measure light; it understands it. By providing real-time exposure data and smart, actionable advice, we empower you to make every shot count.</Text>
             <Image
-              source={require('../../assets/images/camera.png')}
+              source={require('../../assets/images/AboutUs/WhatWeDo.jpg')}
               style={styles.cardImage}
             />
           </View>
 
           <View style={[styles.card, { backgroundColor: '#f2fbf8' }]}>
-            <Text style={styles.cardIcon}>🤝</Text>
-            <Text style={styles.cardTitle}>Our Values</Text>
-            <Text style={styles.cardText}>Need to put text here.</Text>
+            <Text style={styles.cardIcon}>🔆</Text>
+            <Text style={styles.cardTitle}>Your Light. Perfected.</Text>
+            <Text style={styles.cardText}>In the world of photography, light is everything. But capturing that perfect exposure shouldn't feel like a guessing game. Light Meter was born out of a passion for the craft, designed to bridge the gap between technical precision and creative vision.</Text>
             <Image
-              source={require('../../assets/images/camera.png')}
+              source={require('../../assets/images/AboutUs/YourLight.jpg')}
               style={styles.cardImage}
             />
           </View>
