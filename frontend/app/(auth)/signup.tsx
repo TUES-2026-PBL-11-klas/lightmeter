@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import DatePicker from '../../components/DatePicker';
 import { useRouter } from 'expo-router';
+import { api, storeTokens } from '@/src/utils/api';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -38,9 +39,31 @@ export default function SignupScreen() {
   // date picker logic is moved into a reusable component
 
 
-  const handleSignup = () => {
-    // TODO: Replace with actual authentication
-    router.push('/login');
+  const handleSignup = async () => {
+    if (!name || !birthdate || !email || !password || !confirmPassword) {
+      Alert.alert('Error', 'Please fill all fields');
+      return;
+    }
+    if (emailError) {
+      Alert.alert('Error', 'Please enter a valid email');
+      return;
+    }
+    if (password.length < 8) {
+      Alert.alert('Error', 'Password must be at least 8 characters');
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
+
+    const data = await api.post('/auth/register', { email, password, name, birthdate });
+    if (data.accessToken) {
+      storeTokens(data.accessToken, data.refreshToken);
+      router.replace('/meter');
+    } else {
+      Alert.alert('Error', data.message ?? 'Signup failed');
+    }
   };
 
   return (

@@ -12,7 +12,7 @@ export default function MeterScreen() {
   const { iso, setIso, measuredEV, aperture, setAperture, shutterSpeed, isMeasuring, cameraRef, measure, zoom, setZoom } = useMeter();
 
   if (!permission) {
-    return <View style={styles.container}><ActivityIndicator color="#ffd700" /></View>;
+    return <View style={styles.container}><ActivityIndicator color="#33ce7d" /></View>;
   }
   if (!permission.granted) {
     return (

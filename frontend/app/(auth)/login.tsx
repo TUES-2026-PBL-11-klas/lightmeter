@@ -10,6 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { api, storeTokens } from '@/src/utils/api';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -29,7 +30,7 @@ export default function LoginScreen() {
     }
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || emailError) {
       Alert.alert('Error', 'Please enter a valid email');
       return;
@@ -38,8 +39,14 @@ export default function LoginScreen() {
       Alert.alert('Error', 'Please enter your password');
       return;
     }
-    // TODO: Replace with actual authentication
-    router.push('../(tabs)/meter');
+
+    const data = await api.post('/auth/login', { email, password });
+    if (data.accessToken) {
+      storeTokens(data.accessToken, data.refreshToken);
+      router.replace('/meter');
+    } else {
+      Alert.alert('Error', data.message ?? 'Invalid credentials');
+    }
   };
 
   return (
@@ -70,7 +77,7 @@ export default function LoginScreen() {
           autoCapitalize="none"
         />
 
-        <TouchableOpacity style={styles.btn} onPress={handleLogin}>
+        <TouchableOpacity style={styles.btn} onPress={() => handleLogin()}>
           <Text style={styles.btnText}>Log In</Text>
         </TouchableOpacity>
 
