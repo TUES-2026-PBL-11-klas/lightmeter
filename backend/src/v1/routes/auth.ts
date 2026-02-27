@@ -4,7 +4,7 @@ import { db } from '../../db'
 import { users, refreshTokens } from '../../db/schema'
 import { eq } from 'drizzle-orm'
 
-const REFRESH_TOKEN_EXPIRY_DAYS = 30
+const REFRESH_TOKEN_EXPIRY_DAYS = parseInt(process.env.REFRESH_TOKEN_EXPIRY_DAYS ?? '30', 10)
 
 function hashToken(token: string): string {
     return new Bun.CryptoHasher('sha256').update(token).digest('hex')
@@ -25,6 +25,12 @@ async function createRefreshToken(userId: string) {
     return raw
 }
 
+async function issueTokens(userId: string, email: string, jwt: { sign: (payload: Record<string, unknown>) => Promise<string> }) {
+    const accessToken = await jwt.sign({ sub: userId, email })
+    const refreshToken = await createRefreshToken(userId)
+    return { accessToken, refreshToken }
+}
+
 export const authRoutes = new Elysia({ prefix: '/auth', detail: { tags: ['Auth'] } })
     .use(authPlugin)
     .post('/register',
@@ -43,10 +49,7 @@ export const authRoutes = new Elysia({ prefix: '/auth', detail: { tags: ['Auth']
                 password: hashed,
             }).returning({ id: users.id, email: users.email })
 
-            const accessToken = await jwt.sign({ sub: user.id, email: user.email })
-            const refreshToken = await createRefreshToken(user.id)
-
-            return { accessToken, refreshToken }
+            return issueTokens(user.id, user.email, jwt)
         },
         {
             body: t.Object({
@@ -71,10 +74,7 @@ export const authRoutes = new Elysia({ prefix: '/auth', detail: { tags: ['Auth']
                 return { message: 'Invalid credentials' }
             }
 
-            const accessToken = await jwt.sign({ sub: user.id, email: user.email })
-            const refreshToken = await createRefreshToken(user.id)
-
-            return { accessToken, refreshToken }
+            return issueTokens(user.id, user.email, jwt)
         },
         {
             body: t.Object({
