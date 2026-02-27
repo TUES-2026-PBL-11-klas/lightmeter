@@ -1,0 +1,26 @@
+# Copy as terraform.tfvars and fill in the values.
+# Do NOT commit terraform.tfvars to git.
+
+# k8s_host:
+#   kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}'
+#
+# k8s_cluster_ca_certificate:
+#   kubectl config view --minify --raw -o jsonpath='{.clusters[0].cluster.certificate-authority-data}'
+#
+# k8s_token:
+#   kubectl create serviceaccount terraform -n kube-system
+#   kubectl create clusterrolebinding terraform --clusterrole=cluster-admin --serviceaccount=kube-system:terraform
+#   kubectl create token terraform -n kube-system --duration=8760h
+
+k8s_host                   = "https://0.0.0.0:PORT"
+k8s_cluster_ca_certificate = "LS0t..."
+k8s_token                  = "eyJh..."
+
+db_name         = "myapp"
+db_instances    = 1
+db_storage_size = "5Gi"
+
+backend_image    = "dockerhubuser/myapp-backend:1.0.0"
+migrate_image    = "dockerhubuser/myapp-backend-migrate:1.0.0"
+backend_replicas = 1
+backend_port     = 3000
