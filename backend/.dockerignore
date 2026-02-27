@@ -1,0 +1,46 @@
+# Dependencies
+node_modules
+bun.lockb
+
+# Build output
+dist
+build
+out
+server.js
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Version control
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Logs
+*.log
+logs
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode
+.idea
+*.swp
+*.swo
+
+# Tests
+**/*.test.ts
+**/*.spec.ts
+coverage
+
+# Temp
+tmp
+temp
+.cache
