@@ -131,22 +131,22 @@ export default function AboutScreen(): JSX.Element {
             <TeamMember
               name="Didi"
               role="Founder"
-              image={require('../../assets/images/camera.png')}
+              image={require('../../assets/images/AboutUs/didi.jpg')}
             />
             <TeamMember
               name="Kircho"
               role="Founder"
-              image={require('../../assets/images/camera.png')}
+              image={require('../../assets/images/AboutUs/Kircho.jpg')}
             />
             <TeamMember
               name="Vladi"
               role="Founder"
-              image={require('../../assets/images/camera.png')}
+              image={require('../../assets/images/AboutUs/Vladi.jpg')}
             />
             <TeamMember
               name="Nikol"
               role="Founder"
-              image={require('../../assets/images/camera.png')}
+              image={require('../../assets/images/AboutUs/nikol.jpg')}
             />
           </View>
         </View>

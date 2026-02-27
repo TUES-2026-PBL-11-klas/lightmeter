@@ -19,7 +19,7 @@ export const calculateEV100 = ({ iso, shutterSpeed, aperture }: SensorData): num
 const findClosest = (target: number, values: readonly number[]): number => 
   values.reduce((prev, curr) => Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev);
 
-const formatShutterSpeed = (seconds: number): string => 
+export const formatShutterSpeed = (seconds: number): string => 
   seconds >= 1 ? `${Math.round(seconds)}s` : `1/${Math.round(1 / seconds)}`;
 
 
