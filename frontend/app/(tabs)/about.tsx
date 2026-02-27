@@ -146,7 +146,7 @@ export default function AboutScreen(): JSX.Element {
             <TeamMember
               name="Nikol"
               role="Founder"
-              image={require('../../assets/images/AboutUs/Nikol.jpg')}
+              image={require('../../assets/images/AboutUs/nikol.jpg')}
             />
           </View>
         </View>
