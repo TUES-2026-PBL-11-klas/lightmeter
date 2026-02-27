@@ -38,7 +38,6 @@ export default function NotesScreen() {
   const [shutterSpeed, setShutterSpeed] = useState<typeof SHUTTER_SPEEDS[number] | ''>('');
   const [aperture, setAperture] = useState<typeof APERTURE_VALUES[number] | ''>('');
   const [search, setSearch] = useState('');
-  // date picker state (mirrors signup.tsx implementation)
   const [datePickerOpen, setDatePickerOpen] = useState(false);
 
   useEffect(() => {
@@ -56,7 +55,6 @@ export default function NotesScreen() {
     });
   }, []);
 
-  // Filter notes based on search query
   const filteredNotes = notes.filter(
     (note) =>
       note.date.includes(search) ||
@@ -67,44 +65,40 @@ export default function NotesScreen() {
   );
 
   const addNote = async () => {
-  if (!date || !place || iso === '' || aperture === '' || shutterSpeed === '') return;
+    if (!date || !place || iso === '' || aperture === '' || shutterSpeed === '') return;
 
-  const data = await notesApi.create({
-    iso: iso.toString(),
-    aperture: aperture.toString(),
-    shutter_speed: shutterSpeed.toString(),
-    date,
-    place,
-  });
+    const data = await notesApi.create({
+      iso: iso.toString(),
+      aperture: aperture.toString(),
+      shutter_speed: shutterSpeed.toString(),
+      date,
+      place,
+    });
 
-  if (data.id) {
-    setNotes([...notes, {
-      id: data.id,
-      date: data.date,
-      place: data.place,
-      iso: iso as typeof FILM_ISOS[number],
-      aperture: aperture as typeof APERTURE_VALUES[number],
-      shutterSpeed: shutterSpeed as typeof SHUTTER_SPEEDS[number],
-    }]);
-    setDate('');
-    setPlace('');
-    setIso('');
-    setAperture('');
-    setShutterSpeed('');
-    setModalVisible(false);
+    if (data.id) {
+      setNotes([...notes, {
+        id: data.id,
+        date: data.date,
+        place: data.place,
+        iso: iso as typeof FILM_ISOS[number],
+        aperture: aperture as typeof APERTURE_VALUES[number],
+        shutterSpeed: shutterSpeed as typeof SHUTTER_SPEEDS[number],
+      }]);
+      setDate('');
+      setPlace('');
+      setIso('');
+      setAperture('');
+      setShutterSpeed('');
+      setModalVisible(false);
     } else {
       Alert.alert('Error', 'Failed to save note');
     }
   };
 
-  // date picker is now handled by the shared component below
-
   return (
     <View style={styles.container}>
-      {/* Header */}
       <Text style={styles.title}>My Notes</Text>
 
-      {/* Search Input */}
       <TextInput
         style={styles.searchInput}
         placeholder="Search by date, place, iso, aperture, or shutter speed"
@@ -112,7 +106,6 @@ export default function NotesScreen() {
         onChangeText={setSearch}
       />
 
-      {/* List of Notes */}
       <FlatList
         data={filteredNotes}
         keyExtractor={(item) => item.id}
@@ -121,14 +114,13 @@ export default function NotesScreen() {
           <View style={styles.noteCard}>
             <Text style={styles.noteDate}>{item.date}</Text>
             <Text style={styles.notePlace}>{item.place}</Text>
-            <Text style={styles.noteLog}>{item.iso}</Text>
-            <Text style={styles.noteLog}>{item.aperture}</Text>
-            <Text style={styles.noteLog}>{formatShutterSpeed(item.shutterSpeed)}</Text>
+            <Text style={styles.noteLog}>ISO: {item.iso}</Text>
+            <Text style={styles.noteLog}>Aperture: f/{item.aperture}</Text>
+            <Text style={styles.noteLog}>Shutter: {formatShutterSpeed(item.shutterSpeed)}</Text>
           </View>
         )}
       />
 
-      {/* Button */}
       <TouchableOpacity
         style={styles.fab}
         onPress={() => setModalVisible(true)}
@@ -136,12 +128,7 @@ export default function NotesScreen() {
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
 
-      {/* Modal for adding new note */}
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent
-      >
+      <Modal visible={modalVisible} animationType="slide" transparent>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.modalContainer}
@@ -149,7 +136,6 @@ export default function NotesScreen() {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Add Note</Text>
 
-            {/* date selector using same calendar picker as signup */}
             <TouchableOpacity
               style={[styles.modalInput, styles.dateInput]}
               onPress={() => setDatePickerOpen(true)}
@@ -158,54 +144,29 @@ export default function NotesScreen() {
                 {date || 'Select Date'}
               </Text>
             </TouchableOpacity>
+
             <TextInput
               style={styles.modalInput}
               placeholder="Place"
               value={place}
               onChangeText={setPlace}
             />
-            <ChipPicker
-              label="ISO"
-              values={FILM_ISOS}
-              selected={iso}
-              onSelect={(v) => setIso(v)}
-            />
-            <ChipPicker
-              label="Aperture"
-              values={APERTURE_VALUES}
-              selected={aperture}
-              onSelect={(v) => setAperture(v)}
-            />
-            <ChipPicker
-              label="Shutter"
-              values={SHUTTER_SPEEDS}
-              selected={shutterSpeed}
-              onSelect={(v) => setShutterSpeed(v)}
-              format={(v) => formatShutterSpeed(v)}
-            />
+            <ChipPicker label="ISO" values={FILM_ISOS} selected={iso} onSelect={(v) => setIso(v)} />
+            <ChipPicker label="Aperture" values={APERTURE_VALUES} selected={aperture} onSelect={(v) => setAperture(v)} />
+            <ChipPicker label="Shutter" values={SHUTTER_SPEEDS} selected={shutterSpeed} onSelect={(v) => setShutterSpeed(v)} format={(v) => formatShutterSpeed(v)} />
 
             <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={[styles.modalBtn, { backgroundColor: '#33ce7d' }]}
-                onPress={addNote}
-              >
+              <TouchableOpacity style={[styles.modalBtn, { backgroundColor: '#33ce7d' }]} onPress={addNote}>
                 <Text style={styles.modalBtnText}>Save</Text>
               </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[styles.modalBtn, { backgroundColor: '#f0f0f0' }]}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={[styles.modalBtnText, { color: '#33ce7d' }]}>
-                  Cancel
-                </Text>
+              <TouchableOpacity style={[styles.modalBtn, { backgroundColor: '#f0f0f0' }]} onPress={() => setModalVisible(false)}>
+                <Text style={[styles.modalBtnText, { color: '#33ce7d' }]}>Cancel</Text>
               </TouchableOpacity>
             </View>
           </View>
         </KeyboardAvoidingView>
       </Modal>
 
-      {/* shared calendar picker */}
       <DatePicker
         visible={datePickerOpen}
         initialDate={date}
@@ -273,9 +234,5 @@ const styles = StyleSheet.create({
   modalButtons: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
   modalBtn: { paddingVertical: 12, paddingHorizontal: 25, borderRadius: 50, alignItems: 'center' },
   modalBtnText: { fontSize: 16, fontWeight: '700', color: '#fff' },
-  dateInput: {
-    justifyContent: 'center',
-    paddingVertical: 14,
-  },
-
+  dateInput: { justifyContent: 'center', paddingVertical: 14 },
 });
