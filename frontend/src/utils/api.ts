@@ -1,4 +1,6 @@
-const BASE_URL = 'https://nonepithelial-resiliently-rubie.ngrok-free.dev/api/v1';
+import Constants from 'expo-constants';
+
+const BASE_URL = (Constants.expoConfig?.extra?.apiUrl as string) ?? '';
 let accessToken: string | null = null;
 let refreshToken: string | null = null;
 

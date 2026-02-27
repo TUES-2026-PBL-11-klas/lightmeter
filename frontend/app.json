@@ -60,6 +60,7 @@
       "reactCompiler": false
     },
     "extra": {
+      "apiUrl": "https://nonepithelial-resiliently-rubie.ngrok-free.dev/api/v1",
       "router": {},
       "eas": {
         "projectId": "3d3f2ec7-5600-4929-a635-5540c4865d86"
