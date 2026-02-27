@@ -13,7 +13,7 @@ Analog cameras often lack a built-in light meter — and when they do have one, 
 ## Features
 
 ### Light Meter
-Point your phone at a scene and tap Measure. The app reads the phone camera's sensor data (shutter speed, aperture, ISO) via EXIF, calculates the scene brightness as an EV100 value, and recommends the correct aperture and shutter speed for your chosen film stock.
+Point your phone at a scene and tap Measure. The app reads the phone camera's sensor data (shutter speed, aperture, ISO) via EXIF, calculates the scene brightness as an EV100 value, and recommends the correct aperture and shutter speed for your chosen film stock. The light meter works fully offline — all calculations are handled client-side.
 
 ### ISO Selector
 A scrollable chip picker with standard film ISO values (25, 50, 64, 100, 125, 160, 200, 400, 800, 1600, 3200). Changing the ISO instantly updates the recommended exposure.
@@ -24,8 +24,11 @@ A scrollable ruler displaying all valid aperture–shutter speed combinations fo
 ### Zoom Control
 A slider to zoom the camera preview between wide and tele while composing your shot.
 
-### Photo Logger *(in progress)*
-A digital logbook for your film rolls. Records the chosen settings (ISO, aperture, shutter speed) for each frame, with automatic metadata: date, time, and geolocation. Helps with retrospective analysis after the film is developed.
+### Photo Logger
+A digital logbook for your film shots. After taking a photo, log the settings you used — ISO, aperture, shutter speed, date, and location. All entries are saved to the backend and persist across sessions. Helps with retrospective analysis after the film is developed.
+
+### Authentication
+Secure sign up and login with JWT-based authentication. Access tokens are refreshed automatically. Each user's logs are private and tied to their account.
 
 ---
 
@@ -45,8 +48,6 @@ The raw mathematical result (e.g. 1/487.3s) is snapped to the nearest standard p
 **Exposure Ruler generation:**
 The app generates a full array of aperture–shutter speed pairs for the current EV and ISO, so the UI can render the interactive ruler without any on-the-fly computation.
 
-All math is handled client-side for this feature since it is to be used ofline as well.
-
 ---
 
 ## Tech Stack
@@ -54,6 +55,9 @@ All math is handled client-side for this feature since it is to be used ofline a
 | Layer | Technology |
 |---|---|
 | Mobile framework | React Native + Expo |
+| Navigation | Expo Router |
+| Language | TypeScript |
+| Camera | expo-camera |
 | Builds | EAS Build |
 | Backend | Elysia (Bun) |
 | Database | PostgreSQL |
@@ -67,17 +71,22 @@ All math is handled client-side for this feature since it is to be used ofline a
 ```
 lightmeter/
 ├── frontend/
-│   ├── app/              # File-based routes (Expo Router)
+│   ├── app/
+│   │   ├── (app)/        # Authenticated routes (meter, log)
+│   │   └── (auth)/       # Auth routes (login, signup)
 │   ├── src/
+│   │   ├── api/          # Backend API calls (notes, etc.)
 │   │   ├── components/   # Reusable UI components
 │   │   ├── hooks/        # Custom hooks (useMeter, etc.)
 │   │   ├── types/        # Shared types and constants (photoConstants.ts)
-│   │   └── utils/        # Exposure math (exposureMath.ts)
+│   │   └── utils/        # Exposure math and API client
 │   └── assets/
 └── backend/
     └── src/
+        ├── db/           # Drizzle schema and migrations
+        ├── plugins/      # Auth plugin (JWT)
         └── v1/
-            └── routes/   # auth, cameras, rolls, frames
+            └── routes/   # auth, notes
 ```
 
 ---
@@ -86,15 +95,62 @@ lightmeter/
 
 ### Prerequisites
 - Node.js 18+
+- Bun
+- PostgreSQL (local install or Docker)
 - Android device (camera access is not available on emulators)
 - EAS CLI: `npm install -g eas-cli`
+- ngrok: `brew install ngrok`
 
-### Setup
+### Clone the repo
 
 ```bash
-git clone <repo-url>
-cd lightmeter/frontend
+git clone https://github.com/TUES-2026-PBL-11-klas/lightmeter
+cd lightmeter
+```
+
+### Backend setup
+
+```bash
+cd backend
+bun install
+```
+
+Create a `.env` file in `backend/` (see `.env.example`):
+```
+DATABASE_URL=postgres://postgres@localhost:5432/lightmeter
+JWT_SECRET=your_secret_here
+NODE_ENV=development
+REFRESH_TOKEN_EXPIRY_DAYS=30
+```
+
+Create the database and run migrations:
+```bash
+psql postgres -c "CREATE DATABASE lightmeter;"
+DATABASE_URL=postgres://postgres@localhost:5432/lightmeter bunx drizzle-kit migrate
+```
+
+Start the backend:
+```bash
+bun run dev
+```
+
+### Expose backend via ngrok
+
+In a separate terminal, start ngrok using your static domain:
+```bash
+ngrok http 3000 --domain=your-domain.ngrok-free.dev
+```
+
+### Frontend setup
+
+```bash
+cd frontend
 npm install
+```
+
+Create a `.env` file in `frontend/` (see `.env.example`):
+```
+EXPO_PUBLIC_API_URL=https://your-domain.ngrok-free.dev/api/v1
 ```
 
 ### Development build (required for camera)
