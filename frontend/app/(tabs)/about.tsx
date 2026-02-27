@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#8a2b5e',
+    color: '#161616',
     marginBottom: 10,
   },
   heroText: {

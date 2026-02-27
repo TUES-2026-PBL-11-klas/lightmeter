@@ -42,10 +42,10 @@ export const ApertureRuler = ({ currentAperture, onApertureChange }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  rulerContainer: { height: 100, width: '100%', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.8)' },
-  tickLabel: { color: '#666', fontSize: 12, marginBottom: 8 },
-  activeLabel: { color: '#ffd700', fontWeight: 'bold' },
-  tick: { width: 1, height: 20, backgroundColor: '#444' },
-  activeTick: { backgroundColor: '#ffd700', height: 40 },
-  centerIndicator: { position: 'absolute', top: 40, left: width / 2, width: 2, height: 60, backgroundColor: '#ffd700' },
+  rulerContainer: { height: 100, width: '100%', justifyContent: 'center', backgroundColor: 'rgba(201, 200, 200, 0.8)' },
+  tickLabel: { color: '#1e1e1e', fontSize: 12, marginBottom: 8 },
+  activeLabel: { color: '#1b6a41', fontWeight: 'bold' },
+  tick: { width: 1, height: 20, backgroundColor: '#1e1e1e' },
+  activeTick: { backgroundColor: '#1b6a41', height: 40 },
+  centerIndicator: { position: 'absolute', top: 40, left: width / 2, width: 1, height: 60, backgroundColor: '#1b6a41' },
 });

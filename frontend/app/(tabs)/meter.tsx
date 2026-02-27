@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#000', justifyContent: 'center', alignItems: 'center' },
   uiOverlay: { flex: 1, width: '100%', justifyContent: 'space-between', paddingBottom: 40, backgroundColor: 'rgba(0,0,0,0.1)' },
   footer: { alignItems: 'center' },
-  measureButton: { backgroundColor: '#fff', paddingHorizontal: 40, paddingVertical: 16, borderRadius: 50, marginTop: 20, minWidth: 140, alignItems: 'center' },
+  measureButton: { backgroundColor: '#33ce7d', paddingHorizontal: 40, paddingVertical: 16, borderRadius: 50, marginTop: 20, minWidth: 140, alignItems: 'center' },
   measureButtonDisabled: { opacity: 0.5 },
   buttonText: { fontWeight: '900', letterSpacing: 2, color: '#000' },
   permissionText: { color: '#fff', textAlign: 'center', marginBottom: 20 },

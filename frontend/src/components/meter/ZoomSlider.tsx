@@ -17,7 +17,7 @@ export function ZoomSlider({ zoom, onZoomChange }: Props) {
         maximumValue={1}
         value={zoom}
         onValueChange={onZoomChange}
-        minimumTrackTintColor="#ffd700"
+        minimumTrackTintColor="#33ce7d"
         maximumTrackTintColor="rgba(255,255,255,0.3)"
         thumbTintColor="#fff"
       />

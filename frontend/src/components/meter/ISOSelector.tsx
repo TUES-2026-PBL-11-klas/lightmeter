@@ -30,10 +30,10 @@ export function ISOSelector({ selected, onSelect }: Props) {
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', paddingTop: 60, paddingHorizontal: 16 },
-  label: { color: '#ffd700', fontWeight: '700', marginRight: 10, letterSpacing: 1 },
+  label: { color: '#33ce7d', fontWeight: '700', marginRight: 10, letterSpacing: 1 },
   scroll: { gap: 8 },
   chip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
-  chipActive: { backgroundColor: '#ffd700', borderColor: '#ffd700' },
+  chipActive: { backgroundColor: '#33ce7d', borderColor: '#33ce7d' },
   chipText: { color: '#fff', fontSize: 13, fontWeight: '600' },
   chipTextActive: { color: '#000' },
 });
