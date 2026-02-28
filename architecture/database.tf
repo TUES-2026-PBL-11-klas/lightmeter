@@ -27,11 +27,11 @@ resource "kubernetes_secret_v1" "postgres_env" {
   }
 
   data = {
-    POSTGRES_USER           = "postgres"
-    POSTGRES_PASSWORD       = random_password.postgres.result
-    POSTGRES_DB             = var.db_name
-    APP_MIGRATOR_PASSWORD   = random_password.migrator.result
-    APP_PASSWORD            = random_password.app.result
+    POSTGRES_USER         = "postgres"
+    POSTGRES_PASSWORD     = random_password.postgres.result
+    POSTGRES_DB           = var.db_name
+    APP_MIGRATOR_PASSWORD = random_password.migrator.result
+    APP_PASSWORD          = random_password.app.result
   }
 
   lifecycle {

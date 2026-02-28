@@ -16,10 +16,12 @@ k8s_host                   = "https://0.0.0.0:PORT"
 k8s_cluster_ca_certificate = "LS0t..."
 k8s_token                  = "eyJh..."
 
-db_name         = "myapp"
+db_name         = "mydb"
 db_storage_size = "5Gi"
 
-backend_image    = "dockerhubuser/myapp-backend:1.0.0"
-migrate_image    = "dockerhubuser/myapp-backend-migrate:1.0.0"
-backend_replicas = 1
-backend_port     = 3000
+backend_image        = "dockerhubuser/myapp-backend:1.0.0"
+migrate_image        = "dockerhubuser/myapp-backend-migrate:1.0.0"
+backend_replicas     = 1
+backend_port         = 3000
+backend_host         = "api.example.com"
+migrate_image_digest = "132d..."
