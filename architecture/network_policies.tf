@@ -110,16 +110,6 @@ resource "kubernetes_network_policy_v1" "db" {
       }
     }
 
-    ingress {
-      from {
-        namespace_selector {
-          match_labels = {
-            "kubernetes.io/metadata.name" = "cnpg-system"
-          }
-        }
-      }
-    }
-
     egress {
       to {
         namespace_selector {

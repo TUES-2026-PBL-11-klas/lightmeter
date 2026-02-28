@@ -3,8 +3,8 @@ output "backend_service" {
   value       = kubernetes_service_v1.backend.metadata[0].name
 }
 
-output "db_cluster_name" {
-  description = "CNPG Cluster name"
+output "db_name" {
+  description = "PostgreSQL database name"
   value       = var.db_name
 }
 

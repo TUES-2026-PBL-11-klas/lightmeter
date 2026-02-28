@@ -1,25 +1,3 @@
-
-resource "random_password" "migrator" {
-  length           = 32
-  special          = true
-  override_special = "!#$%&*-_=+:?"
-}
-
-resource "kubernetes_secret_v1" "migrator_password" {
-  metadata {
-    name      = "${var.db_name}-migrator-password"
-    namespace = kubernetes_namespace_v1.db.metadata[0].name
-  }
-
-  data = {
-    password = random_password.migrator.result
-  }
-
-  lifecycle {
-    ignore_changes = [data]
-  }
-}
-
 resource "kubernetes_secret_v1" "migrator_uri" {
   metadata {
     name      = "${var.db_name}-migrator-uri"
@@ -30,15 +8,11 @@ resource "kubernetes_secret_v1" "migrator_uri" {
     uri = "postgres://app_migrator:${urlencode(random_password.migrator.result)}@${var.db_name}-rw:5432/${var.db_name}"
   }
 
-   lifecycle {
-    ignore_changes = [data]  # ← добави това
+  lifecycle {
+    ignore_changes = [data]
   }
-
-
-  depends_on = [kubernetes_secret_v1.migrator_password]
 }
 
-# Secret consumed by the backend deployment (in app namespace)
 resource "kubernetes_secret_v1" "app_uri" {
   metadata {
     name      = "${var.db_name}-app"
@@ -70,10 +44,9 @@ resource "kubernetes_job_v1" "migrate" {
   }
 
   spec {
-    parallelism   = 1
-    completions   = 1
-    backoff_limit = 3
-
+    parallelism                = 1
+    completions                = 1
+    backoff_limit              = 3
     ttl_seconds_after_finished = 600
 
     template {
@@ -85,8 +58,7 @@ resource "kubernetes_job_v1" "migrate" {
       }
 
       spec {
-        restart_policy = "Never"
-
+        restart_policy                  = "Never"
         automount_service_account_token = false
 
         init_container {
@@ -120,7 +92,6 @@ resource "kubernetes_job_v1" "migrate" {
             run_as_group               = 1000
             read_only_root_filesystem  = true
             allow_privilege_escalation = false
-
             capabilities {
               drop = ["ALL"]
             }

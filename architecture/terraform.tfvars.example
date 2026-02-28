@@ -17,7 +17,6 @@ k8s_cluster_ca_certificate = "LS0t..."
 k8s_token                  = "eyJh..."
 
 db_name         = "myapp"
-db_instances    = 1
 db_storage_size = "5Gi"
 
 backend_image    = "dockerhubuser/myapp-backend:1.0.0"

@@ -6,6 +6,12 @@ resource "random_password" "postgres" {
   override_special = "!#$%&*-_=+:?"
 }
 
+resource "random_password" "migrator" {
+  length           = 32
+  special          = true
+  override_special = "!#$%&*-_=+:?"
+}
+
 resource "random_password" "app" {
   length           = 32
   special          = true
@@ -21,11 +27,11 @@ resource "kubernetes_secret_v1" "postgres_env" {
   }
 
   data = {
-    POSTGRES_USER               = "postgres"
-    POSTGRES_PASSWORD           = random_password.postgres.result
-    POSTGRES_DB                 = var.db_name
-    APP_MIGRATOR_PASSWORD       = random_password.migrator.result
-    APP_PASSWORD                = random_password.app.result
+    POSTGRES_USER           = "postgres"
+    POSTGRES_PASSWORD       = random_password.postgres.result
+    POSTGRES_DB             = var.db_name
+    APP_MIGRATOR_PASSWORD   = random_password.migrator.result
+    APP_PASSWORD            = random_password.app.result
   }
 
   lifecycle {
@@ -43,13 +49,13 @@ resource "kubernetes_config_map_v1" "postgres_init" {
 
   data = {
     "init.sh" = templatefile("${path.module}/init.sh.tpl", {
-      db_name                = var.db_name
-      app_migrator_password  = random_password.migrator.result
-      app_password           = random_password.app.result
+      db_name               = var.db_name
+      app_migrator_password = random_password.migrator.result
+      app_password          = random_password.app.result
     })
   }
 
-    lifecycle {
+  lifecycle {
     ignore_changes = [data]
   }
 }
