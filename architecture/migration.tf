@@ -30,6 +30,11 @@ resource "kubernetes_secret_v1" "migrator_uri" {
     uri = "postgres://app_migrator:${urlencode(random_password.migrator.result)}@${var.db_name}-rw:5432/${var.db_name}"
   }
 
+   lifecycle {
+    ignore_changes = [data]  # ← добави това
+  }
+
+
   depends_on = [kubernetes_secret_v1.migrator_password]
 }
 

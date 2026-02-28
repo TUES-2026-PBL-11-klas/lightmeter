@@ -42,36 +42,15 @@ resource "kubernetes_config_map_v1" "postgres_init" {
   }
 
   data = {
-    "init.sh" = <<-BASH
-      #!/bin/bash
-      set -euo pipefail
+    "init.sh" = templatefile("${path.module}/init.sh.tpl", {
+      db_name                = var.db_name
+      app_migrator_password  = random_password.migrator.result
+      app_password           = random_password.app.result
+    })
+  }
 
-      psql -v ON_ERROR_STOP=1 \
-           --username "$POSTGRES_USER" \
-           --dbname   "$POSTGRES_DB" <<-SQL
-        CREATE ROLE app_migrator
-          WITH LOGIN PASSWORD '$APP_MIGRATOR_PASSWORD';
-
-        CREATE ROLE app
-          WITH LOGIN PASSWORD '$APP_PASSWORD';
-
-        GRANT CREATE ON DATABASE "$POSTGRES_DB" TO app_migrator;
-        GRANT CREATE ON SCHEMA public TO app_migrator;
-
-        CREATE SCHEMA IF NOT EXISTS app
-          AUTHORIZATION app_migrator;
-
-        GRANT USAGE ON SCHEMA app TO app;
-
-        ALTER DEFAULT PRIVILEGES
-          FOR ROLE app_migrator IN SCHEMA app
-          GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO app;
-
-        ALTER DEFAULT PRIVILEGES
-          FOR ROLE app_migrator IN SCHEMA app
-          GRANT USAGE, SELECT ON SEQUENCES TO app;
-      SQL
-    BASH
+    lifecycle {
+    ignore_changes = [data]
   }
 }
 
@@ -109,8 +88,6 @@ resource "kubernetes_stateful_set_v1" "postgres" {
       spec {
         automount_service_account_token = false
 
-        # fsGroup does not apply to subPath mounts (k8s limitation)
-        # so we fix ownership with an init container instead.
         init_container {
           name    = "fix-permissions"
           image   = "busybox"
@@ -136,7 +113,6 @@ resource "kubernetes_stateful_set_v1" "postgres" {
             container_port = 5432
           }
 
-          # All credentials come from the secret so nothing is in plain text
           env_from {
             secret_ref {
               name = kubernetes_secret_v1.postgres_env.metadata[0].name
@@ -216,8 +192,6 @@ resource "kubernetes_stateful_set_v1" "postgres" {
     kubernetes_config_map_v1.postgres_init,
   ]
 }
-
-# ── Service (same name as the old CNPG -rw service — nothing else needs change)
 
 resource "kubernetes_service_v1" "postgres" {
   metadata {

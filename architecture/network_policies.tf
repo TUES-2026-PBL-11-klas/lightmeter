@@ -15,21 +15,21 @@ resource "kubernetes_network_policy_v1" "backend" {
 
     policy_types = ["Ingress", "Egress"]
 
+
     ingress {
       ports {
         port     = tostring(var.backend_port)
         protocol = "TCP"
       }
+
       from {
         namespace_selector {
-          match_labels = {
-            "kubernetes.io/metadata.name" = "kube-system"
-          }
+          match_labels = { "kubernetes.io/metadata.name" = "kube-system" }
         }
+      }
+      from {
         pod_selector {
-          match_labels = {
-            "app.kubernetes.io/name" = "traefik"
-          }
+          match_labels = { "app.kubernetes.io/name" = "traefik" }
         }
       }
     }

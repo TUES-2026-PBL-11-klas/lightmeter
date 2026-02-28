@@ -136,6 +136,10 @@ resource "kubernetes_deployment_v1" "backend" {
             }
           }
         }
+        volume {
+  name = "tmp"
+  empty_dir {}
+}
       }
     }
   }
